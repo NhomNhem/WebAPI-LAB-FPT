@@ -1,6 +1,7 @@
 using Demo19305.Models;
 using Demo19305.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Demo19305.Controllers;
 
@@ -114,6 +115,11 @@ public class AccountController : ControllerBase
     [Route("/api/register")]
     public async Task<IActionResult> Register([FromBody] Account account) {
         try {
+
+            Console.WriteLine(account.Email);
+            Console.WriteLine(account.Password);
+            Console.WriteLine(account.Name);
+
             if (string.IsNullOrEmpty(account.Email))
                 return StatusCode(500, "Email is required");
             if (string.IsNullOrEmpty(account.Password))
