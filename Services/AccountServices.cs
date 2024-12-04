@@ -9,20 +9,29 @@ public class AccountServices : IAccountServices
     
     public AccountServices(AppDataContext.AppDataContext context) => _context = context;
 
-    public Task<Account> Register(string email, string password, string name)
-    {
-        try
-        {
-            var account = new Account
+    public Task<Account> Register(string email, string password, string name) {
+        try {
+            // kiểm tra xem email đã tồn tại chưa
+            // select * from Accounts where Email = email
+            var account = _context.Accounts
+                                .FirstOrDefault(x => x.Email == email);
+            if (account != null)
+            {
+                throw new Exception("Email already exists");
+            }
+            // tạo mới 1 tài khoản
+            var newAccount = new Account
             {
                 Email = email,
                 Password = password,
-                Name = name
+                Name = name,
+                Created_At = DateTime.Now,
+                Updated_At = DateTime.Now
             };
-            // gọi dbset
-            _context.Accounts.Add(account); // insert into
-            _context.SaveChanges(); // lưu lại
-            return Task.FromResult(account); // trả về account
+            // thêm tài khoản vào database
+            _context.Accounts.Add(newAccount);
+            _context.SaveChanges();
+            return Task.FromResult(newAccount);
         }
         catch (Exception e)
         {
@@ -122,21 +131,11 @@ public class AccountServices : IAccountServices
         }
     }
 
-
-    public Task<Account> Register(Account account)
-    {
-        try
-        {
-            // gọi dbset
-            _context.Accounts.Add(account); // insert into
-            _context.SaveChanges(); // lưu lại
-            return Task.FromResult(account); // trả về account
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
+    public Task<Account> AccountRegister(string email, string password, string name) {
+        throw new NotImplementedException();
     }
+
+
 
     public Task<Account> Login(Account account) => throw new NotImplementedException();
 
@@ -157,5 +156,6 @@ public class AccountServices : IAccountServices
             throw new Exception(e.Message);
         }
     }
+
 
 }

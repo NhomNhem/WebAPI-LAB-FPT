@@ -7,7 +7,6 @@ namespace Demo19305.Services;
 public interface IAccountServices
 {
     // đăng ký, đăng nhập
-    Task<Account> Register(string email, string password, string name);
     Task<Account> Login(string email, string password);
     // lấy danh sách tất cả tài khoản
     Task<List<Account>> GetAllAccounts();
@@ -25,7 +24,7 @@ public interface IAccountServices
     Task<List<Account>> GetAllAccountsByNameAndEmail(string name, string email);
 
     // register account
-    Task<Account> Register(Account account);
+    Task<Account> Register(string email, string password, string name);
 
     // login account
     Task<Account> Login(Account account);

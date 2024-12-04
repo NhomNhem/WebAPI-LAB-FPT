@@ -127,7 +127,7 @@ public class AccountController : ControllerBase
             if (string.IsNullOrEmpty(account.Name))
                 return StatusCode(500, "Name is required");
 
-            account = await _accountServices.Register(account);
+            account = await _accountServices.Register(account.Email, account.Password, account.Name);
             return Ok(new { status = true, data = account });
         }
         catch (Exception e) {
